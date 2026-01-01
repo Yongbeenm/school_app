@@ -43,7 +43,8 @@ jobs:
         shell: cmd
         working-directory: windows_packaging
         run: |
-            call build_all_and_make_setup.bat
+          call build_all_and_make_setup.bat
+
 
 
       - name: Find installer exe and rename
