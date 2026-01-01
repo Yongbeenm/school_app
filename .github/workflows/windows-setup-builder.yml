@@ -41,8 +41,10 @@ jobs:
 
       - name: Build all + make setup
         shell: cmd
+        working-directory: windows_packaging
         run: |
-          windows_packaging\build_all_and_make_setup.bat
+            call build_all_and_make_setup.bat
+
 
       - name: Find installer exe and rename
         shell: pwsh
