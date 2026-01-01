@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+      <h2 class="fw-semibold mb-1">👩‍🏫 {{ t('teacher_dashboard') }}</h2>
+      <div class="small-muted">🏫 {{ classroom.name }} — {{ teacher.full_name }}</div>
+    </div>
+    {% if selected_term %}
+      <div class="d-flex gap-2 flex-wrap">
+        <a class="btn btn-outline-secondary btn-sm btn-emoji" target="_blank" href="{{ url_for('teacher.print_results', term_id=selected_term.id) }}">🖨️ {{ t('print') }} {{ t('results') }}</a>
+        <a class="btn btn-outline-secondary btn-sm btn-emoji" target="_blank" href="{{ url_for('teacher.print_ranking', term_id=selected_term.id) }}">🖨️ {{ t('print') }} {{ t('ranking') }}</a>
+        <a class="btn btn-outline-primary btn-sm btn-emoji" href="{{ url_for('teacher.trackbook', term_id=selected_term.id) }}">📒 {{ t('trackbook') }}</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <form class="row g-2 align-items-end" method="get" action="{{ url_for('teacher.dashboard') }}" data-autosubmit="true">
+        <div class="col-12 col-md-6">
+          <label class="form-label">🗓️ {{ t('term') }}</label>
+          <select class="form-select" name="term_id" required>
+            {% for term in terms %}
+              <option value="{{ term.id }}" {% if selected_term and selected_term.id==term.id %}selected{% endif %}>{{ term.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label">📚 {{ t('subject') }}</label>
+          <select class="form-select" name="subject_id" required>
+            {% for s in subjects %}
+              <option value="{{ s.id }}" {% if selected_subject and selected_subject.id==s.id %}selected{% endif %}>{{ s.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-12">
+          <button class="btn btn-primary btn-emoji" type="submit">✨ {{ t('select') }}</button>
+        </div>
+      </form>
+</div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      {% if selected_term and selected_subject and students %}
+        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-2">
+  <h5 class="fw-semibold mb-0">📝 {{ t('marks') }} — {{ selected_subject.name }} ({{ selected_term.name }})</h5>
+  <span id="autosaveStatus" class="small-muted" data-saving="{{ t('saving') }}" data-saved="{{ t('saved') }}"></span>
+</div>
+
+        <div data-marks-autosave="1" data-term-id="{{ selected_term.id }}" data-subject-id="{{ selected_subject.id }}">
+<form method="post" action="{{ url_for('teacher.save_marks') }}">
+          <input type="hidden" name="term_id" value="{{ selected_term.id }}">
+          <input type="hidden" name="subject_id" value="{{ selected_subject.id }}">
+          <table class="table table-hover datatable align-middle">
+            <thead>
+              <tr><th>#</th><th>{{ t('student_code') }}</th><th>{{ t('full_name') }}</th><th class="text-center">😴 {{ t('absent') }}</th><th class="text-center">✅ {{ t('permission') }}</th><th>{{ t('score') }}</th><th class="no-print">📒 {{ t('trackbook') }}</th></tr>
+            </thead>
+            <tbody>
+              {% for s in students %}
+                {% set m = existing_marks.get(s.id) %}
+                <tr>
+                  <td>{{ loop.index }}</td>
+                  <td>{{ s.student_code }}</td>
+                  <td>{{ s.full_name }}</td>
+                  <td style="max-width:160px;">
+                    <input class="form-control mark-input" data-student-id="{{ s.id }}" name="score_{{ s.id }}" value="{{ "%.2f"|format(m.score) if m else '' }}">
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <button class="btn btn-primary btn-emoji">💾 {{ t('save_marks') }}</button>
+        </form>
+</div>
+      {% else %}
+        <div class="small-muted">{{ t('no_data') }}</div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='marks_autosave.js') }}"></script>
+  <script src="{{ url_for('static', filename='attendance_autosave.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2 class="fw-semibold mb-3">{{ t('ranking') }}</h2>
+
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <form class="row g-2 align-items-end" method="get" action="{{ url_for('admin.ranking') }}" data-autosubmit="true">
+        <div class="col-12 col-md-6">
+          <label class="form-label">{{ t('class') }}</label>
+          <select class="form-select" name="class_id" required>
+            <option value="">{{ t('select') }}</option>
+            {% for c in classes %}
+              <option value="{{ c.id }}" {% if selected_class and selected_class.id==c.id %}selected{% endif %}>{{ c.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-12 col-md-6">
+          <label class="form-label">{{ t('term') }}</label>
+          <select class="form-select" name="term_id" required>
+            <option value="">{{ t('select') }}</option>
+            {% for term in terms %}
+              <option value="{{ term.id }}" {% if selected_term and selected_term.id==term.id %}selected{% endif %}>{{ term.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-12">
+          <button class="btn btn-primary" type="submit">{{ t('ranking') }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      {% if rows %}
+        <table class="table table-hover datatable align-middle">
+          <thead><tr><th>{{ t('rank') }}</th><th>{{ t('student_code') }}</th><th>{{ t('full_name') }}</th><th>{{ t('average') }}</th></tr></thead>
+          <tbody>
+            {% for r in rows %}
+              <tr>
+                <td>{{ r.rank }}</td>
+                <td>{{ r.student_code }}</td>
+                <td>{{ r.full_name }}</td>
+                <td>{{ "%.2f"|format(r.avg_score) if r.avg_score is not none else "-" }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="small-muted">{{ t('no_data') }}</div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

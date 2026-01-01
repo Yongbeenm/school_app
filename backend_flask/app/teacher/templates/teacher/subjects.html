@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h2 class="fw-semibold mb-0">📚 {{ t('subjects') }}</h2>
+      <div class="small-muted">គ្រូអាចបង្កើតមុខវិជ្ជាសម្រាប់បញ្ចូលពិន្ទុ</div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <form class="row g-2 align-items-end" method="post" action="{{ url_for('teacher.subjects_create') }}">
+        <div class="col-12 col-md-7">
+          <label class="form-label">{{ t('subject') }}</label>
+          <input class="form-control" name="name" required>
+        </div>
+        <div class="col-12 col-md-3">
+          <label class="form-label">{{ t('weight') }}</label>
+          <input class="form-control" name="weight" value="1.0" required>
+        </div>
+        <div class="col-12 col-md-2">
+          <button class="btn btn-primary w-100 btn-emoji" type="submit">✨ {{ t('create') }}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <table class="table table-hover datatable align-middle">
+        <thead><tr><th>#</th><th>{{ t('subject') }}</th><th>{{ t('weight') }}</th><th>{{ t('actions') }}</th></tr></thead>
+        <tbody>
+          {% for s in subjects %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ s.name }}</td>
+              <td>{{ "%.2f"|format(s.weight) }}</td>
+              <td>
+                <form method="post" action="{{ url_for('teacher.subjects_delete', subject_id=s.id) }}"
+                      onsubmit="return confirm('{{ t('confirm_delete') }}')" style="display:inline;">
+                  <button class="btn btn-sm btn-outline-danger btn-emoji">🗑️ {{ t('delete') }}</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="small-muted">{{ t('no_data') if not subjects else '' }}</div>
+    </div>
+  </div>
+{% endblock %}

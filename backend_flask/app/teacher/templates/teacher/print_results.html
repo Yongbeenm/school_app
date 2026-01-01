@@ -1,0 +1,35 @@
+{% extends "teacher/print_base.html" %}
+{% block content %}
+  <h3 class="mb-1">🧾 លទ្ធផល</h3>
+  <div class="text-muted mb-3">ថ្នាក់៖ {{ classroom.name }} — ប្រចាំខែ៖ {{ term.name }}</div>
+
+  <table class="table table-bordered table-sm align-middle">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>លេខសម្គាល់សិស្ស</th>
+        <th>ឈ្មោះ</th>
+        {% for sub in subjects %}
+          <th>{{ sub.name }}</th>
+        {% endfor %}
+        <th>មធ្យមភាគ</th>
+        <th>ចំណាត់ថ្នាក់</th><th>អវត្តមាន</th><th>សុំច្បាប់</th><th class="no-print">បោះពុម្ព</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in students %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td>{{ s.student_code }}</td>
+          <td>{{ s.full_name }}</td>
+          {% for sub in subjects %}
+            {% set sc = mark_map.get((s.id, sub.id)) %}
+            <td>{{ "%.1f"|format(sc) if sc is not none else "" }}</td>
+          {% endfor %}
+          <td>{{ "%.2f"|format(avg_map.get(s.id)) if avg_map.get(s.id) is not none else "-" }}</td>
+          <td>{{ rank_map.get(s.id) if rank_map.get(s.id) else "-" }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

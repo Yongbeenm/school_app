@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2 class="fw-semibold mb-3">👩‍🏫 {{ t('teachers') }}</h2>
+
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <form method="post" action="{{ url_for('admin.teachers_create') }}">
+        <div class="row g-2">
+          <div class="col-12 col-md-4">
+            <label class="form-label">{{ t('full_name') }}</label>
+            <input class="form-control" name="full_name" required>
+          </div>
+          <div class="col-12 col-md-3">
+            <label class="form-label">{{ t('username') }}</label>
+            <input class="form-control" name="username" required>
+          </div>
+          <div class="col-12 col-md-3">
+            <label class="form-label">{{ t('password') }}</label>
+            <input class="form-control" name="password" type="password" required>
+          </div>
+          <div class="col-12 col-md-2">
+            <label class="form-label">🏫 {{ t('class') }}</label>
+            <select class="form-select" name="class_id">
+              <option value="">(ស្រេចចិត្ត)</option>
+              {% for c in classes %}
+                <option value="{{ c.id }}">{{ c.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="col-12 d-flex align-items-end">
+            <button class="btn btn-primary btn-emoji" type="submit">✨ {{ t('create') }}</button>
+          </div>
+        </div>
+      </form>
+      <div class="small-muted mt-2">ច្បាប់៖ ១ ថ្នាក់/បន្ទប់ = ១ គ្រូ</div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <table class="table table-hover datatable align-middle">
+        <thead><tr><th>#</th><th>{{ t('full_name') }}</th><th>{{ t('username') }}</th><th>🏫 {{ t('class') }}</th><th>{{ t('actions') }}</th></tr></thead>
+        <tbody>
+          {% for te in teachers %}
+            {% set u = users.get(te.id) %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ te.full_name }}</td>
+              <td>{{ u.username if u else "-" }}</td>
+              <td>
+                <form class="d-flex gap-2" method="post" action="{{ url_for('admin.teachers_assign_class', teacher_id=te.id) }}">
+                  <select class="form-select form-select-sm" name="class_id">
+                    <option value="">-</option>
+                    {% for c in classes %}
+                      <option value="{{ c.id }}" {% if te.class_id==c.id %}selected{% endif %}>{{ c.name }}</option>
+                    {% endfor %}
+                  </select>
+                  <button class="btn btn-sm btn-outline-primary btn-emoji">💾 {{ t('save') }}</button>
+                </form>
+              </td>
+              <td>
+                <form method="post" action="{{ url_for('admin.teachers_delete', teacher_id=te.id) }}" onsubmit="return confirm('{{ t('confirm_delete') }}')" style="display:inline;">
+                  <button class="btn btn-sm btn-outline-danger btn-emoji">🗑️ {{ t('delete') }}</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="small-muted">{{ t('no_data') if not teachers else '' }}</div>
+    </div>
+  </div>
+{% endblock %}

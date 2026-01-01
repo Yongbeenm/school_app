@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h2 class="fw-semibold mb-0">💡 {{ t('help') }}</h2>
+      <div class="small-muted">{{ t('hints') }}</div>
+    </div>
+  </div>
+
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {% if default_role=='admin' %}active{% endif %}" data-bs-toggle="tab" data-bs-target="#admin" type="button">🛠️ {{ t('admin') }}</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {% if default_role=='teacher' %}active{% endif %}" data-bs-toggle="tab" data-bs-target="#teacher" type="button">👩‍🏫 {{ t('teacher') }}</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link {% if default_role=='student' %}active{% endif %}" data-bs-toggle="tab" data-bs-target="#student" type="button">🎓 {{ t('student') }}</button>
+    </li>
+  </ul>
+
+  <div class="tab-content border border-top-0 p-3 rounded-bottom bg-white bg-opacity-75">
+    <div class="tab-pane fade {% if default_role=='admin' %}show active{% endif %}" id="admin" role="tabpanel">
+      <h5 class="fw-semibold mb-2">🛠️ {{ t('admin') }}</h5>
+      <ul class="mb-0">
+        <li>គ្រប់គ្រង 🏫 {{ t('classes') }}</li>
+        <li>គ្រប់គ្រង 👩‍🏫 {{ t('teachers') }} (១ ថ្នាក់ = ១ គ្រូ)</li>
+        <li>គ្រប់គ្រង 👩‍🎓 {{ t('students') }} (លេខសម្គាល់សិស្សបង្កើតស្វ័យប្រវត្តិ)</li>
+        <li>មើល 🏆 {{ t('ranking') }}</li>
+      </ul>
+    </div>
+
+    <div class="tab-pane fade {% if default_role=='teacher' %}show active{% endif %}" id="teacher" role="tabpanel">
+      <h5 class="fw-semibold mb-2">👩‍🏫 {{ t('teacher') }}</h5>
+      <ul class="mb-0">
+        <li>បញ្ចូល/លុប {{ t('students') }} ក្នុងថ្នាក់របស់ខ្លួន</li>
+        <li>បង្កើត/លុប {{ t('subjects') }}</li>
+        <li>បង្កើត/លុប {{ t('terms') }} (ប្រចាំខែ)</li>
+        <li>បញ្ចូល {{ t('marks') }} ដោយជ្រើសរើស ប្រចាំខែ + មុខវិជ្ជា</li>
+        <li>✅ {{ t('autosave') }} ពេលវាយបញ្ចូលពិន្ទុ</li>
+        <li>បោះពុម្ព {{ t('results') }} និង {{ t('ranking') }}</li>
+      </ul>
+    </div>
+
+    <div class="tab-pane fade {% if default_role=='student' %}show active{% endif %}" id="student" role="tabpanel">
+      <h5 class="fw-semibold mb-2">🎓 {{ t('student') }}</h5>
+      <ul class="mb-0">
+        <li>ចូលប្រើប្រាស់ដើម្បីមើល {{ t('marks') }} របស់ខ្លួន</li>
+        <li>មើល {{ t('average') }} និង {{ t('ranking') }}</li>
+      </ul>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2 class="fw-semibold mb-2">🎓 {{ t('my_dashboard') }}</h2>
+  <div class="small-muted mb-3">{{ student.full_name }} — {{ classroom.name if classroom else "-" }}</div>
+
+  <div class="row g-3 mb-3">
+    <div class="col-12 col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="small-muted">{{ t('student_code') }}</div>
+          <div class="fs-5 fw-semibold">{{ student.student_code }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="small-muted">{{ t('average') }}</div>
+          <div class="fs-5 fw-semibold">{{ "%.2f"|format(avg_score) if avg_score is not none else "-" }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <div class="small-muted">{{ t('rank') }}</div>
+          <div class="fs-5 fw-semibold">{% if my_rank %}{{ my_rank }} / {{ total_ranked }}{% else %}-{% endif %}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <form class="row g-2 align-items-end" method="get" action="{{ url_for('user.dashboard') }}" data-autosubmit="true">
+        <div class="col-12 col-md-6">
+          <label class="form-label">{{ t('term') }}</label>
+          <select class="form-select" name="term_id" required>
+            {% for term in terms %}
+              <option value="{{ term.id }}" {% if selected_term and selected_term.id==term.id %}selected{% endif %}>{{ term.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="col-12 col-md-6">
+          <button class="btn btn-primary w-100" type="submit">{{ t('select') }}</button>
+        </div>
+      </form>
+<div class="card shadow-sm mb-3">
+  <div class="card-body">
+    <h5 class="fw-semibold mb-2">📒 {{ t('trackbook') }}</h5>
+    <div class="row g-2">
+      <div class="col-6 col-md-3"><b>{{ t('absent') }}៖</b> {{ monthly_rec.absent if monthly_rec else 0 }}</div>
+      <div class="col-6 col-md-3"><b>{{ t('permission') }}៖</b> {{ monthly_rec.permission if monthly_rec else 0 }}</div>
+      <div class="col-12"><b>{{ t('note') }}៖</b> {{ monthly_rec.note if monthly_rec and monthly_rec.note else "-" }}</div>
+    </div>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h5 class="fw-semibold">📝 {{ t('marks') }}</h5>
+      {% if marks %}
+        <table class="table table-hover datatable align-middle">
+          <thead><tr><th>{{ t('subject') }}</th><th>{{ t('weight') }}</th><th>{{ t('score') }}</th></tr></thead>
+          <tbody>
+            {% for m, sub in marks %}
+              <tr>
+                <td>{{ sub.name }}</td>
+                <td>{{ "%.2f"|format(sub.weight) }}</td>
+                <td>{{ "%.2f"|format(m.score) }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <div class="small-muted">{{ t('no_data') }}</div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}

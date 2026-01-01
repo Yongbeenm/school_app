@@ -1,0 +1,21 @@
+{% extends "teacher/print_base.html" %}
+{% block content %}
+  <h3 class="mb-1">🏆 ចំណាត់ថ្នាក់</h3>
+  <div class="text-muted mb-3">ថ្នាក់៖ {{ classroom.name }} — ប្រចាំខែ៖ {{ term.name }}</div>
+
+  <table class="table table-bordered align-middle">
+    <thead>
+      <tr><th>ចំណាត់ថ្នាក់</th><th>លេខសម្គាល់សិស្ស</th><th>ឈ្មោះ</th><th>មធ្យមភាគ</th></tr>
+    </thead>
+    <tbody>
+      {% for r in rows %}
+        <tr>
+          <td>{{ r.rank }}</td>
+          <td>{{ r.student_code }}</td>
+          <td>{{ r.full_name }}</td>
+          <td>{{ "%.2f"|format(r.avg_score) if r.avg_score is not none else "-" }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

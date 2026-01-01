@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block content %}
+  <style>
+    .tb-card { border-radius: 18px; }
+    .tb-head { position: sticky; top: 0; z-index: 2; background: rgba(255,255,255,.95); backdrop-filter: blur(6px); }
+    .tb-input { border-radius: 14px; }
+    .tb-note { border-radius: 14px; min-height: 44px; }
+    .tb-pill { border-radius: 999px; }
+    .tb-row:hover { background: rgba(0,0,0,.02); }
+  </style>
+
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+      <h2 class="fw-semibold mb-1">📒 {{ t('trackbook') }}</h2>
+      <div class="small-muted">🏫 {{ classroom.name }} — 👩‍🏫 {{ teacher.full_name }}</div>
+    </div>
+    <div class="d-flex gap-2 flex-wrap align-items-center">
+      <span class="badge badge-soft tb-pill">🗓️ {{ selected_term.name }}</span>
+      <span id="trackStatus" class="small-muted" data-saving="{{ t('saving') }}" data-saved="{{ t('saved') }}"></span>
+      <a class="btn btn-outline-primary btn-sm btn-emoji tb-pill" href="{{ url_for('teacher.dashboard', term_id=selected_term.id) }}">📝 {{ t('marks') }}</a>
+    </div>
+  </div>
+
+  <div class="card shadow-sm tb-card mb-3">
+    <div class="card-body">
+      <div class="row g-2 align-items-end">
+        <div class="col-12 col-md-6">
+          <form class="row g-2 align-items-end" method="get" action="{{ url_for('teacher.trackbook') }}" data-autosubmit="true">
+            <div class="col-12">
+              <label class="form-label">🗓️ {{ t('term') }}</label>
+              <select class="form-select tb-input" name="term_id" required>
+                {% for term in terms %}
+                  <option value="{{ term.id }}" {% if selected_term and selected_term.id==term.id %}selected{% endif %}>{{ term.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </form>
+        </div>
+
+        <div class="col-12 col-md-6">
+          <label class="form-label">🔎 ស្វែងរកសិស្ស</label>
+          <input id="tbSearch" class="form-control tb-input" placeholder="វាយឈ្មោះ ឬ លេខសម្គាល់សិស្ស">
+        </div>
+      </div>
+
+      <div class="small-muted mt-2">
+        ✅ {{ t('save_auto') }} — បញ្ចូល <b>{{ t('absent') }}</b> / <b>{{ t('permission') }}</b> / <b>{{ t('note') }}</b> ហើយវានឹងរក្សាទុកដោយស្វ័យប្រវត្តិ
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm tb-card" data-trackbook="1" data-term-id="{{ selected_term.id }}">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="tb-head">
+            <tr>
+              <th style="width:60px">#</th>
+              <th style="width:140px">{{ t('student_code') }}</th>
+              <th>{{ t('full_name') }}</th>
+              <th style="width:120px" class="text-center">😴 {{ t('absent') }}</th>
+              <th style="width:120px" class="text-center">✅ {{ t('permission') }}</th>
+              <th style="min-width:280px">📝 {{ t('note') }}</th>
+              <th class="no-print" style="width:170px">🖨️ {{ t('print') }}</th>
+            </tr>
+          </thead>
+          <tbody id="tbBody">
+            {% for s in students %}
+              {% set r = rec_map.get(s.id) %}
+              <tr class="tb-row" data-search="{{ (s.student_code ~ ' ' ~ s.full_name)|lower }}">
+                <td class="fw-semibold">{{ loop.index }}</td>
+                <td><span class="badge badge-soft tb-pill">🎓 {{ s.student_code }}</span></td>
+                <td class="fw-semibold">👧🧒 {{ s.full_name }}</td>
+                <td class="text-center">
+                  <input class="form-control form-control-sm tb-input tb-absent" type="number" min="0" data-student-id="{{ s.id }}" value="{{ r.absent if r else 0 }}">
+                </td>
+                <td class="text-center">
+                  <input class="form-control form-control-sm tb-input tb-permission" type="number" min="0" data-student-id="{{ s.id }}" value="{{ r.permission if r else 0 }}">
+                </td>
+                <td>
+                  <textarea class="form-control form-control-sm tb-note tb-note" rows="2" data-student-id="{{ s.id }}">{{ r.note if r else "" }}</textarea>
+                </td>
+                <td class="no-print">
+                  <div class="d-flex gap-2 flex-wrap">
+                    <a class="btn btn-sm btn-outline-secondary btn-emoji tb-pill" target="_blank"
+                      href="{{ url_for('teacher.print_student', student_id=s.id, term_id=selected_term.id) }}">🖨️ {{ t('print_one') }}</a>
+                    <a class="btn btn-sm btn-outline-primary btn-emoji tb-pill" target="_blank"
+                      href="{{ url_for('teacher.print_results', term_id=selected_term.id) }}">📄 {{ t('results') }}</a>
+                  </div>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='trackbook_autosave.js') }}"></script>
+  <script>
+    (function(){
+      const inp = document.getElementById('tbSearch');
+      const body = document.getElementById('tbBody');
+      if(!inp || !body) return;
+      function run(){
+        const q = (inp.value || '').trim().toLowerCase();
+        body.querySelectorAll('tr[data-search]').forEach((tr)=>{
+          const hay = tr.getAttribute('data-search') || '';
+          tr.style.display = (!q || hay.includes(q)) ? '' : 'none';
+        });
+      }
+      inp.addEventListener('input', run);
+    })();
+  </script>
+{% endblock %}

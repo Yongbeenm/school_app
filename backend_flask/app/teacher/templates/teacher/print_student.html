@@ -1,0 +1,54 @@
+{% extends "teacher/print_base.html" %}
+{% set title = "បោះពុម្ពលទ្ធផលសិស្ស" %}
+{% block content %}
+  <div class="mb-3">
+    <h3 class="fw-semibold mb-1">🏫 លទ្ធផលសិស្ស (ម្នាក់មួយ)</h3>
+    <div class="text-muted">ថ្នាក់/បន្ទប់៖ <b>{{ classroom.name }}</b> — ប្រចាំខែ៖ <b>{{ term.name }}</b></div>
+    <div class="text-muted">គ្រូ៖ <b>{{ teacher.full_name }}</b></div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-2">
+        <div class="col-12 col-md-6"><b>លេខសម្គាល់សិស្ស៖</b> {{ student.student_code }}</div>
+        <div class="col-12 col-md-6"><b>ឈ្មោះ៖</b> {{ student.full_name }}</div>
+        <div class="col-12 col-md-4"><b>{{ t('average') }}៖</b> {{ "%.2f"|format(avg) if avg is not none else "-" }}</div>
+        <div class="col-12 col-md-4"><b>{{ t('rank') }}៖</b> {{ rank if rank else "-" }}</div>
+        <div class="col-12 col-md-4"><b>{{ t('term') }}៖</b> {{ term.name }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body">
+      <div class="row g-2">
+        <div class="col-12 col-md-4"><b>{{ t('absent') }}៖</b> {{ rec.absent if rec else 0 }}</div>
+        <div class="col-12 col-md-4"><b>{{ t('permission') }}៖</b> {{ rec.permission if rec else 0 }}</div>
+        <div class="col-12"><b>{{ t('note') }}៖</b> {{ rec.note if rec and rec.note else "-" }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <table class="table table-bordered align-middle mb-0">
+        <thead>
+          <tr>
+            <th style="width:60px">#</th>
+            <th>{{ t('subject') }}</th>
+            <th style="width:140px">{{ t('score') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for sub in subjects %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ sub.name }}</td>
+              <td>{{ mark_map.get(sub.id, '-') }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2 class="fw-semibold mb-3">🏫 {{ t('classes') }}</h2>
+
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <form class="row g-2 align-items-end" method="post" action="{{ url_for('admin.classes_create') }}">
+        <div class="col-12 col-md-8">
+          <label class="form-label">{{ t('room') }}</label>
+          <input class="form-control" name="name" required>
+        </div>
+        <div class="col-12 col-md-4">
+          <button class="btn btn-primary w-100 btn-emoji" type="submit">✨ {{ t('create') }}</button>
+        </div>
+      </form>
+      <div class="small-muted mt-2">ច្បាប់៖ ១ ថ្នាក់/បន្ទប់ = ១ គ្រូ</div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <table class="table table-hover datatable align-middle">
+        <thead><tr><th>#</th><th>{{ t('room') }}</th><th>👩‍🏫 {{ t('teacher') }}</th><th>{{ t('actions') }}</th></tr></thead>
+        <tbody>
+          {% for c in classes %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ c.name }}</td>
+              <td>
+                {% set te = teachers_by_class.get(c.id) %}
+                {% if te %}{{ te.full_name }}{% else %}<span class="small-muted">-</span>{% endif %}
+              </td>
+              <td>
+                <form method="post" action="{{ url_for('admin.classes_delete', class_id=c.id) }}"
+                      onsubmit="return confirm('{{ t('confirm_delete') }}')" style="display:inline;">
+                  <button class="btn btn-sm btn-outline-danger btn-emoji">🗑️ {{ t('delete') }}</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="small-muted">{{ t('no_data') if not classes else '' }}</div>
+    </div>
+  </div>
+{% endblock %}

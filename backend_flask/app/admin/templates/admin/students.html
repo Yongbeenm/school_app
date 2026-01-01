@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2 class="fw-semibold mb-3">{{ t('students') }}</h2>
+
+  <div class="card shadow-sm mb-3">
+    <div class="card-body">
+      <form method="post" action="{{ url_for('admin.students_create') }}">
+        <div class="row g-2">
+<div class="col-12 col-md-5">
+            <label class="form-label">{{ t('full_name') }}</label>
+            <input class="form-control" name="full_name" required>
+          </div>
+          <div class="col-12 col-md-4">
+            <label class="form-label">{{ t('class') }}</label>
+            <select class="form-select" name="class_id" required>
+              <option value="">{{ t('select') }}</option>
+              {% for c in classes %}
+                <option value="{{ c.id }}">{{ c.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="col-12 col-md-4">
+            <label class="form-label">{{ t('username') }}</label>
+            <input class="form-control" name="username" required>
+          </div>
+          <div class="col-12 col-md-4">
+            <label class="form-label">{{ t('password') }}</label>
+            <input class="form-control" name="password" type="password" required>
+          </div>
+          <div class="col-12 col-md-4 d-flex align-items-end">
+            <button class="btn btn-primary w-100" type="submit">{{ t('create') }}</button>
+          </div>
+        </div>
+      </form>
+</div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <table class="table table-hover datatable align-middle">
+        <thead><tr><th>#</th><th>{{ t('student_code') }}</th><th>{{ t('full_name') }}</th><th>{{ t('class') }}</th><th>{{ t('actions') }}</th></tr></thead>
+        <tbody>
+          {% for s in students %}
+            <tr>
+              <td>{{ loop.index }}</td>
+              <td>{{ s.student_code }}</td>
+              <td>{{ s.full_name }}</td>
+              <td>{{ s.classroom.name }}</td>
+              <td>
+                <form method="post" action="{{ url_for('admin.students_delete', student_id=s.id) }}" onsubmit="return confirm('{{ t('confirm_delete') }}')" style="display:inline;">
+                  <button class="btn btn-sm btn-outline-danger">{{ t('delete') }}</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      <div class="small-muted">{{ t('no_data') if not students else '' }}</div>
+    </div>
+  </div>
+{% endblock %}

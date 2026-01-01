@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080" viewBox="0 0 1920 1080">
+  <defs>
+    <linearGradient id="sky" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#dff2ff"/>
+      <stop offset="1" stop-color="#f7fbff"/>
+    </linearGradient>
+    <linearGradient id="grass" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0" stop-color="#c8f3d0"/>
+      <stop offset="1" stop-color="#9fe7b0"/>
+    </linearGradient>
+    <filter id="softShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity=".15"/>
+    </filter>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#sky)"/>
+
+  <g opacity=".65">
+    <g transform="translate(210,140)">
+      <ellipse cx="0" cy="30" rx="90" ry="45" fill="#fff"/>
+      <ellipse cx="80" cy="25" rx="70" ry="40" fill="#fff"/>
+      <ellipse cx="150" cy="35" rx="85" ry="45" fill="#fff"/>
+    </g>
+    <g transform="translate(1400,170)">
+      <ellipse cx="0" cy="30" rx="100" ry="50" fill="#fff"/>
+      <ellipse cx="95" cy="25" rx="80" ry="45" fill="#fff"/>
+      <ellipse cx="175" cy="35" rx="95" ry="50" fill="#fff"/>
+    </g>
+    <g transform="translate(980,90) scale(.9)">
+      <ellipse cx="0" cy="30" rx="90" ry="45" fill="#fff"/>
+      <ellipse cx="80" cy="25" rx="70" ry="40" fill="#fff"/>
+      <ellipse cx="150" cy="35" rx="85" ry="45" fill="#fff"/>
+    </g>
+  </g>
+
+  <g transform="translate(1650,130)" opacity=".9">
+    <circle r="55" fill="#ffe08a"/>
+    <g stroke="#ffd065" stroke-width="8" stroke-linecap="round">
+      <line x1="-85" y1="0" x2="-120" y2="0"/>
+      <line x1="85" y1="0" x2="120" y2="0"/>
+      <line x1="0" y1="-85" x2="0" y2="-120"/>
+      <line x1="0" y1="85" x2="0" y2="120"/>
+      <line x1="-60" y1="-60" x2="-90" y2="-90"/>
+      <line x1="60" y1="-60" x2="90" y2="-90"/>
+      <line x1="-60" y1="60" x2="-90" y2="90"/>
+      <line x1="60" y1="60" x2="90" y2="90"/>
+    </g>
+  </g>
+
+  <path d="M0,760 C260,720 420,820 680,780 C980,730 1170,840 1460,790 C1660,755 1780,740 1920,760 L1920,1080 L0,1080 Z"
+        fill="url(#grass)"/>
+
+  <g filter="url(#softShadow)">
+    <g transform="translate(230,720)">
+      <rect x="-12" y="70" width="24" height="90" rx="10" fill="#9a6b44"/>
+      <circle cx="0" cy="40" r="65" fill="#7ed39a"/>
+      <circle cx="-40" cy="55" r="45" fill="#78cf95"/>
+      <circle cx="45" cy="60" r="40" fill="#74c98f"/>
+    </g>
+    <g transform="translate(1680,735)">
+      <rect x="-12" y="70" width="24" height="95" rx="10" fill="#9a6b44"/>
+      <circle cx="0" cy="40" r="70" fill="#7ed39a"/>
+      <circle cx="-45" cy="55" r="45" fill="#78cf95"/>
+      <circle cx="50" cy="60" r="42" fill="#74c98f"/>
+    </g>
+  </g>
+
+  <g transform="translate(960,760)" filter="url(#softShadow)">
+    <g transform="translate(-360,-260)">
+      <rect x="0" y="80" width="720" height="360" rx="22" fill="#ffffff"/>
+      <rect x="0" y="80" width="720" height="360" rx="22" fill="none" stroke="#d9e6ff" stroke-width="8"/>
+
+      <path d="M40,90 L360,-60 L680,90 Z" fill="#ffb4c8"/>
+      <path d="M40,90 L360,-60 L680,90 Z" fill="none" stroke="#f59ab4" stroke-width="8"/>
+
+      <circle cx="360" cy="70" r="44" fill="#f3f7ff" stroke="#cfe0ff" stroke-width="8"/>
+      <line x1="360" y1="70" x2="360" y2="48" stroke="#6b7aa6" stroke-width="8" stroke-linecap="round"/>
+      <line x1="360" y1="70" x2="382" y2="70" stroke="#6b7aa6" stroke-width="8" stroke-linecap="round"/>
+
+      <rect x="318" y="250" width="84" height="190" rx="18" fill="#c6d9ff" stroke="#9dbbff" stroke-width="8"/>
+      <circle cx="388" cy="345" r="7" fill="#6b7aa6"/>
+
+      <g fill="#eaf2ff" stroke="#cfe0ff" stroke-width="7">
+        <rect x="90" y="180" width="110" height="85" rx="14"/>
+        <rect x="245" y="180" width="110" height="85" rx="14"/>
+        <rect x="410" y="180" width="110" height="85" rx="14"/>
+        <rect x="565" y="180" width="110" height="85" rx="14"/>
+
+        <rect x="90" y="300" width="110" height="85" rx="14"/>
+        <rect x="245" y="300" width="110" height="85" rx="14"/>
+        <rect x="410" y="300" width="110" height="85" rx="14"/>
+        <rect x="565" y="300" width="110" height="85" rx="14"/>
+      </g>
+
+      <rect x="220" y="120" width="280" height="54" rx="18" fill="#fff6d6" stroke="#ffe39a" stroke-width="7"/>
+      <text x="360" y="156" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="28" fill="#6b5b2b">SCHOOL</text>
+    </g>
+  </g>
+
+  <g opacity=".18">
+    <g fill="#6b7aa6">
+      <path d="M220 940 l60 -60 22 22 -60 60 -30 8z"/>
+      <rect x="260" y="880" width="18" height="18" rx="4"/>
+      <circle cx="1440" cy="940" r="28"/>
+      <rect x="1412" y="914" width="56" height="56" rx="14"/>
+      <path d="M1260 930 h70 v56 h-70z"/>
+    </g>
+  </g>
+</svg>

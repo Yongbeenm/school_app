@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+    <div>
+      <h2 class="fw-semibold mb-0">🧸 {{ t('admin_dashboard') }}</h2>
+      <div class="small-muted">{{ t('dashboard') }}</div>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <span class="badge badge-soft">👩‍🎓 {{ t('students') }}: {{ students }}</span>
+      <span class="badge badge-soft">👩‍🏫 {{ t('teachers') }}: {{ teachers }}</span>
+      <span class="badge badge-soft">🏫 {{ t('classes') }}: {{ classes }}</span>
+      <span class="badge badge-soft">🗓️ {{ t('terms') }}: {{ months }}</span>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h5 class="fw-semibold mb-2">✨ ម៉ឺនុយរហ័ស</h5>
+      <div class="row g-2">
+        <div class="col-6 col-md-3"><a class="btn btn-outline-primary w-100 btn-emoji" href="{{ url_for('admin.classes_list') }}">🏫 {{ t('classes') }}</a></div>
+        <div class="col-6 col-md-3"><a class="btn btn-outline-primary w-100 btn-emoji" href="{{ url_for('admin.students_list') }}">👩‍🎓 {{ t('students') }}</a></div>
+        <div class="col-6 col-md-3"><a class="btn btn-outline-primary w-100 btn-emoji" href="{{ url_for('admin.teachers_list') }}">👩‍🏫 {{ t('teachers') }}</a></div>
+        <div class="col-6 col-md-3"><a class="btn btn-outline-primary w-100 btn-emoji" href="{{ url_for('admin.ranking') }}">🏆 {{ t('ranking') }}</a></div>
+      </div>
+      <div class="small-muted mt-2">អ្នកគ្រប់គ្រងអាចគ្រប់គ្រងតែ៖ គ្រូ / សិស្ស / ថ្នាក់ / ចំណាត់ថ្នាក់ ប៉ុណ្ណោះ</div>
+    </div>
+  </div>
+{% endblock %}
