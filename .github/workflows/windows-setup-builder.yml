@@ -1,15 +1,4 @@
 name: Windows Setup Builder
-      - name: Compile Inno Setup installer
-        shell: pwsh
-        run: |
-          $candidates = @(
-            "C:\Program Files (x86)\Inno Setup 6\ISCC.exe",
-            "C:\Program Files\Inno Setup 6\ISCC.exe"
-          )
-          $iscc = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
-          if (-not $iscc) { throw "ISCC.exe not found" }
-          & $iscc "windows_packaging\installer\SchoolApp.iss" /O"windows_packaging\installer\Output" /F"SchoolApp_Setup"
-
 
 on:
   workflow_dispatch:
@@ -54,16 +43,24 @@ jobs:
         run: |
           call windows_packaging\build_all_and_make_setup.bat
 
-      - name: Find installer exe and rename
+      - name: Compile Inno Setup installer
         shell: pwsh
         run: |
-          $exe = Get-ChildItem -Recurse -Filter "SchoolApp_Setup*.exe" -ErrorAction SilentlyContinue |
+          $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
+          if (!(Test-Path $iscc)) { $iscc = "C:\Program Files\Inno Setup 6\ISCC.exe" }
+          if (!(Test-Path $iscc)) { throw "ISCC.exe not found" }
+
+          New-Item -ItemType Directory -Force -Path "windows_packaging\installer\Output" | Out-Null
+          & $iscc "windows_packaging\installer\SchoolApp.iss" /O"windows_packaging\installer\Output" /F"SchoolApp_Setup"
+
+      - name: Find installer exe and rename (non-fatal)
+        shell: pwsh
+        run: |
+          $exe = Get-ChildItem -Path "windows_packaging\installer\Output" -Filter "SchoolApp_Setup*.exe" -ErrorAction SilentlyContinue |
                  Sort-Object LastWriteTime -Descending | Select-Object -First 1
           if (-not $exe) {
-            Write-Host "SchoolApp_Setup*.exe not found. Recent EXEs:"
-            Get-ChildItem -Recurse -Filter "*.exe" | Sort-Object LastWriteTime -Descending |
-              Select-Object -First 20 FullName,LastWriteTime | Format-Table -AutoSize
-            throw "Installer not found"
+            Write-Host "Installer not found (will still upload portable artifact)."
+            exit 0
           }
           Copy-Item $exe.FullName -Destination "SchoolApp_Setup.exe" -Force
           Write-Host "Installer copied to SchoolApp_Setup.exe"
@@ -73,3 +70,11 @@ jobs:
         with:
           name: SchoolApp_Setup
           path: SchoolApp_Setup.exe
+          if-no-files-found: warn
+
+      - name: Upload portable artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SchoolApp_Portable
+          path: dist/SchoolApp_Portable/**
+          if-no-files-found: warn
