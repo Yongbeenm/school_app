@@ -39,11 +39,11 @@ jobs:
         run: |
           choco install innosetup -y
 
-      - name: Build all + make setup
+            - name: Build all + make setup
         shell: cmd
-        working-directory: windows_packaging
         run: |
-          call build_all_and_make_setup.bat
+          call windows_packaging\build_all_and_make_setup.bat
+
 
 
 
