@@ -1,4 +1,5 @@
 @echo off
+cd /d "%~dp0\.."
 setlocal
 
 REM Build everything (backend EXE + frontend Windows + portable folder + installer)
