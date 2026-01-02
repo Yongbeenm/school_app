@@ -24,7 +24,7 @@ PrivilegesRequired=lowest
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "..\dist\SchoolApp_Portable\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs ignoreversion
+Source: ..\..\dist\SchoolApp_Portable\*"; DestDir: "{app}"; Flags: recursesubdirs createallsubdirs ignoreversion
 
 [Icons]
 Name: "{autoprograms}\{#AppName}"; Filename: "{app}\start.bat"
